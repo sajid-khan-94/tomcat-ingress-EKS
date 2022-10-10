@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: space
+  name: space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: space
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: space
+    spec:
+      volumes:
+      - name: space
+        hostPath:
+          path: /tmp/space
+      containers:
+      - image: sajid1994/centos-tomcat
+        name: centos-tomcat
+		volumeMounts:
+        - mountPath: /opt/tomcat/webapps/space
+          name: space
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}

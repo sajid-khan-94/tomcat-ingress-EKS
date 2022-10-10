@@ -1,0 +1,105 @@
+
+#Command to install aws cli
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# to configure your account 
+aws configure 
+
+# To check already configured users
+aws iam list-users
+
+
+#commands to connect to your eks cluster from a local linux machine
+
+aws eks --region ap-south-1 describe-cluster --name sajid-test-eks  --query cluster.status
+aws eks --region ap-south-1 update-kubeconfig --name sajid-test-eksaw
+
+# Command to install eksctl 
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version (optional to check version)
+
+# Command to create eks cluster using eksctl utility 
+
+eksctl create cluster \
+--name sajid-test-eks \ 
+--region ap-south-1 \
+--nodegroup-name sajid-test-res \
+--node-type t3.small \
+--nodes 2 \
+--nodes-min 2 \
+--nodes-max 2 \
+--ssh-access \
+--ssh-public-key Sajid-EKS \
+--managed
+
+# Command to connect worker ec2-instances 
+	ssh -i "Sajid-EKS.pem" ec2-user@ec2-3-111-51-178.ap-south-1.compute.amazonaws.com
+	ssh -i "Sajid-EKS.pem" ec2-user@ec2-3-7-59-99.ap-south-1.compute.amazonaws.com
+	
+# Commadn to instal helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+# Commant to install nginx controller using helm chart
+helm repo add nginx-stable https://helm.nginx.com/stable
+
+helm install check-ingress-controller ingress-nginx/ingress-nginx \
+--namespace nginx-test \ 
+--set controller.replicaCount=1 \
+--set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+--set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
+ 
+wget https://www.free-css.com/assets/files/free-css-templates/download/page284/space-dynamic.zip
+unzip space-dynamic.zip 
+mv templatemo_562_space_dynamic space
+
+wget https://www.free-css.com/assets/files/free-css-templates/download/page283/ninom.zip
+unzip ninom.zip 
+mv ninom-html fruits
+
+ 
+ 
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: ingress-resource-test
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: a499773a9ebc749f98b99770dccac25f-120819814.ap-south-1.elb.amazonaws.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: main-test
+            port:
+              number: 8080
+      - path: /painter
+        pathType: Prefix
+        backend:
+          service:
+            name: painter
+            port:
+              number: 8080
+	  - path: /space
+        pathType: Prefix
+        backend:
+          service:
+            name: space
+            port:
+              number: 8080
+      - path: /fruits
+        pathType: Prefix
+        backend:
+          service:
+            name: 
+            port:
+              number: 8080

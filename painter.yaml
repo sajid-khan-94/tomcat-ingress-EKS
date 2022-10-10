@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: painter
+  name: painter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: painter
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: painter
+    spec:
+	  volumes:
+      - name: painter
+        hostPath:
+          path: /tmp/paint
+      containers:
+      - image: sajid1994/centos-tomcat
+        name: centos-tomcat
+		volumeMounts:
+        - mountPath: /opt/tomcat/webapps/painter
+          name: painter
+        ports:
+        - containerPort: 8080
+        resources: {}
+status: {}
